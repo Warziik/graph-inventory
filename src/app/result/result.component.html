@@ -1,4 +1,20 @@
-<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<form [formGroup]="chartTypeForm">
+    <mat-form-field style="width: 100%">
+        <mat-label>Type de graphique</mat-label>
+        <mat-select formControlName="type">
+            <mat-option *ngFor="let type of chartTypes" [value]="type.value">
+                {{type.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</form>
+<div style="width: 100%;">
+    <canvas baseChart [chartType]="chartTypeForm.value['type']" [datasets]="chartData" [labels]="chartLabels"
+        [options]="chartOptions" [legend]="true">
+    </canvas>
+</div>
+<br><br>
+<mat-table [dataSource]="computers" class="mat-elevation-z8">
     <ng-container matColumnDef="id">
         <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
         <mat-cell *matCellDef="let computer"> {{computer.id}} </mat-cell>
@@ -38,3 +54,4 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
+<br>
