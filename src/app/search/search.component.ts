@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -27,7 +28,7 @@ export class SearchComponent implements OnInit {
     { id: 4, name: '1607' }
   ]
 
-  constructor(private titleService: Title) {
+  constructor(private titleService: Title, private router: Router) {
     this.titleService.setTitle("Rechercher");
   }
 
@@ -41,5 +42,6 @@ export class SearchComponent implements OnInit {
 
   onSubmitForm() {
     console.log(this.searchForm.value);
+    this.router.navigate(['/results']);
   }
 }
