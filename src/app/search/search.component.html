@@ -1,0 +1,27 @@
+<form [formGroup]="searchForm" (ngSubmit)="onSubmitForm()">
+    <mat-form-field style="width: 100%">
+        <mat-label>Système d'exploitation</mat-label>
+        <mat-select formControlName="os">
+            <mat-option *ngFor="let os of oses" [value]="os.id">
+                {{os.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 100%">
+        <mat-label>Architecture</mat-label>
+        <mat-select formControlName="architecture">
+            <mat-option *ngFor="let architecture of architectures" [value]="architecture.id">
+                {{architecture.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 100%">
+        <mat-label>Version</mat-label>
+        <mat-select formControlName="version">
+            <mat-option *ngFor="let version of versions" [value]="version.id">
+                {{version.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <p align="center"><button type="submit" mat-raised-button color="primary">Rechercher</button></p>
+</form>
