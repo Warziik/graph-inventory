@@ -63,6 +63,12 @@ export class ResultComponent implements OnInit {
   }
 
   openExportDialog() {
-    this.dialog.open(ExportDialogComponent, { data: { chartUrl: document.getElementsByTagName('canvas')[0].toDataURL('image/png') } });
+    let chartUrl: string = document.getElementsByTagName('canvas')[0].toDataURL('image/png');
+    this.dialog.open(ExportDialogComponent, {
+      data: {
+        chartUrl: chartUrl,
+        tableElement: document.getElementById('resultsToConvert')
+      }
+    });
   }
 }
