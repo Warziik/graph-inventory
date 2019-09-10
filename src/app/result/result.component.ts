@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { FormGroup, FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+import { ExportDialogComponent } from './export-dialog/export-dialog.component';
 
 @Component({
   selector: 'app-result',
@@ -13,10 +15,10 @@ export class ResultComponent implements OnInit {
   chartTypeForm: FormGroup;
 
   chartTypes: Object[] = [
+    { value: 'horizontalBar', name: 'Bar horizontal' },
+    { value: 'bar', name: 'Bar' },
     { value: 'pie', name: 'Pie' },
     { value: 'doughnut', name: 'Doughnut' },
-    { value: 'bar', name: 'Bar' },
-    { value: 'horizontalBar', name: 'Bar horizontal' },
     { value: 'line', name: 'Line' },
     { value: 'polarArea', name: 'Polar Area' },
     { value: 'radar', name: 'Radar' }
@@ -34,7 +36,7 @@ export class ResultComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'status', 'os', 'antivirus', 'manufacturer', 'serial'];
   computers: Object[];
 
-  constructor(private titleService: Title) {
+  constructor(private titleService: Title, public dialog: MatDialog) {
     this.titleService.setTitle("Résultats");
   }
 
@@ -60,4 +62,7 @@ export class ResultComponent implements OnInit {
     ];
   }
 
+  openExportDialog() {
+    this.dialog.open(ExportDialogComponent, { data: { chartUrl: document.getElementsByTagName('canvas')[0].toDataURL('image/png') } });
+  }
 }
