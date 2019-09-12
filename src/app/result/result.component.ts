@@ -66,6 +66,7 @@ export class ResultComponent implements OnInit {
     let chartUrl: string = document.getElementsByTagName('canvas')[0].toDataURL('image/png');
     this.dialog.open(ExportDialogComponent, {
       data: {
+        chartType: this.chartTypeForm.get('type').value,
         chartUrl: chartUrl,
         tableElement: document.getElementById('resultsToConvert')
       }

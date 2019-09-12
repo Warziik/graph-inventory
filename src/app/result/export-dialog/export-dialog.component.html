@@ -1,10 +1,43 @@
 <h2 mat-dialog-title>Exporter</h2>
 
-<mat-dialog-content>
-    <a href="#" download="graphique.png" mat-raised-button color="primary" (click)="onClickExportChart($event)">
-        <mat-icon>get_app</mat-icon> Télécharger le graphique
-    </a>&nbsp;
-    <a href="#" download="tableau.png" mat-raised-button color="accent" (click)="onClickExportTable($event)">
-        <mat-icon>get_app</mat-icon> Télécharger le tableau
-    </a>
-</mat-dialog-content>
+<div mat-dialog-content>
+    <!--
+    <mat-tab-group>
+        <mat-tab label="Image">
+            <a href="#" download="graphique.png" mat-raised-button color="primary" (click)="onClickExportChart($event)">
+                <mat-icon>get_app</mat-icon> Télécharger le graphique
+            </a>&nbsp;
+            <a href="#" download="tableau.png" mat-raised-button color="accent" (click)="onClickExportTable($event)">
+                <mat-icon>get_app</mat-icon> Télécharger le tableau
+            </a>
+        </mat-tab>
+        <mat-tab label="PDF"> ... </mat-tab>
+    </mat-tab-group>
+-->
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">insert_photo</mat-icon>&nbsp;
+                Image / PNG
+            </ng-template>
+            <br>
+            <a href="#" download="graphique.png" mat-raised-button color="primary" (click)="onClickExportChart($event)">
+                <mat-icon>get_app</mat-icon> Télécharger le graphique
+            </a>&nbsp;
+            <a href="#" download="tableau.png" mat-raised-button color="accent" (click)="onClickExportTable($event)">
+                <mat-icon>get_app</mat-icon> Télécharger le tableau
+            </a>
+        </mat-tab>
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">picture_as_pdf</mat-icon>&nbsp;
+                PDF
+            </ng-template>
+            <br>
+            <a href="#" style="width: 100%" mat-raised-button color="primary" (click)="onClickExportPdf()">
+                <mat-icon>get_app</mat-icon> Exporter en PDF
+            </a>
+        </mat-tab>
+    </mat-tab-group>
+</div>

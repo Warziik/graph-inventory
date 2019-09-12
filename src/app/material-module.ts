@@ -13,6 +13,7 @@ import {
     MatExpansionModule,
     MatFormFieldModule,
     MatGridListModule,
+    MatTabsModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
@@ -79,6 +80,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
         MatSnackBarModule,
         MatSortModule,
         MatTableModule,
+        MatTabsModule,
     ]
 })
 export class MaterialModule { }
