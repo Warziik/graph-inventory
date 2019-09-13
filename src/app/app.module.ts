@@ -10,6 +10,7 @@ import { SearchComponent } from './search/search.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ResultComponent } from './result/result.component';
 import { ExportDialogComponent } from './result/export-dialog/export-dialog.component';
+import { IpcService } from './services/ipc/ipc.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { ExportDialogComponent } from './result/export-dialog/export-dialog.comp
     ChartsModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [IpcService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
