@@ -1,7 +1,8 @@
-import { app, BrowserWindow, Menu } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain, IpcMainEvent } from 'electron';
 
 import * as url from 'url';
 import * as path from 'path';
+import Database from './core/database';
 
 let mainWindow: BrowserWindow;
 
@@ -44,3 +45,10 @@ app.on('activate', () => {
         createWindow();
     }
 });
+
+ipcMain.on('client:retriveDefaultFormValues', async (event: IpcMainEvent, ...args: any[]) => {
+    let data = await Database.instance.retrieveDefaultFormValues().then((results: Object) => {
+        return results;
+    }).catch(err => console.error(err))
+    event.sender.send('server:sendDefaultFormValues', data);
+})

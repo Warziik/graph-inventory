@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { IpcService } from '../services/ipc/ipc.service';
+import { IpcRendererEvent } from 'electron';
 
 @Component({
   selector: 'app-search',
@@ -11,28 +13,24 @@ import { Router } from '@angular/router';
 export class SearchComponent implements OnInit {
   searchForm: FormGroup;
 
-  oses: Object[] = [
-    { id: 1, name: 'Windows' },
-    { id: 2, name: 'Linux' }
-  ]
+  oses: Object[];
 
-  architectures: Object[] = [
-    { id: 1, name: '32-bit' },
-    { id: 2, name: '64-bit' }
-  ]
+  architectures: Object[];
 
-  versions: Object[] = [
-    { id: 1, name: '7' },
-    { id: 2, name: 'XP' },
-    { id: 3, name: '2000' },
-    { id: 4, name: '1607' }
-  ]
+  versions: Object[];
 
-  constructor(private titleService: Title, private router: Router) {
+  constructor(private titleService: Title, private router: Router, private ipcService: IpcService) {
     this.titleService.setTitle("Rechercher");
   }
 
   ngOnInit() {
+    this.ipcService.on('server:sendDefaultFormValues', (event: IpcRendererEvent, data: any) => {
+      this.oses = data.oses;
+      this.architectures = data.architectures;
+      this.versions = data.versions;
+    })
+    this.ipcService.send('client:retriveDefaultFormValues');
+
     this.searchForm = new FormGroup({
       os: new FormControl(''),
       architecture: new FormControl(''),
