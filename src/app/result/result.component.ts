@@ -1,28 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { FormGroup, FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material';
-import { ExportDialogComponent } from './export-dialog/export-dialog.component';
+import { Component, OnInit } from "@angular/core";
+import { Title } from "@angular/platform-browser";
+import { FormGroup, FormControl } from "@angular/forms";
+import { MatDialog } from "@angular/material";
+import { ExportDialogComponent } from "./export-dialog/export-dialog.component";
+import { IpcService } from "../services/ipc/ipc.service";
+import { IpcRendererEvent } from "electron";
 
 @Component({
-  selector: 'app-result',
-  templateUrl: './result.component.html',
-  styleUrls: ['./result.component.scss']
+  selector: "app-result",
+  templateUrl: "./result.component.html",
+  styleUrls: ["./result.component.scss"]
 })
 export class ResultComponent implements OnInit {
-
   // Chart
   chartTypeForm: FormGroup;
 
   chartTypes: Object[] = [
-    { value: 'horizontalBar', name: 'Bar horizontal' },
-    { value: 'bar', name: 'Bar' },
-    { value: 'pie', name: 'Pie' },
-    { value: 'doughnut', name: 'Doughnut' },
-    { value: 'line', name: 'Line' },
-    { value: 'polarArea', name: 'Polar Area' },
-    { value: 'radar', name: 'Radar' }
-  ]
+    { value: "horizontalBar", name: "Bar horizontal" },
+    { value: "bar", name: "Bar" },
+    { value: "pie", name: "Pie" },
+    { value: "doughnut", name: "Doughnut" },
+    { value: "line", name: "Line" },
+    { value: "polarArea", name: "Polar Area" },
+    { value: "radar", name: "Radar" }
+  ];
 
   chartOptions: Object = {
     responsive: true
@@ -33,43 +34,56 @@ export class ResultComponent implements OnInit {
   chartLabels: string[];
 
   // Table
-  displayedColumns: string[] = ['id', 'name', 'status', 'os', 'antivirus', 'manufacturer', 'serial'];
+  displayedColumns: string[] = [
+    "id",
+    "name",
+    "status",
+    "os",
+    "antivirus",
+    "manufacturer",
+    "serial"
+  ];
   computers: Object[];
 
-  constructor(private titleService: Title, public dialog: MatDialog) {
+  constructor(
+    private titleService: Title,
+    private ipcService: IpcService,
+    public dialog: MatDialog
+  ) {
     this.titleService.setTitle("Résultats");
   }
 
   ngOnInit() {
+    this.ipcService.on(
+      "server:sendResults",
+      (event: IpcRendererEvent, data: ResultsInterface) => {
+        console.log(data);
+        this.computers = data.computers;
+        this.chartData = data.chart.data;
+        this.chartLabels = data.chart.labels;
+      }
+    );
+
     this.chartTypeForm = new FormGroup({
-      type: new FormControl('horizontalBar')
-    })
-
-    this.chartData = [
-      { data: [330, 600, 260, 700], label: 'Account A' },
-      { data: [120, 455, 100, 340], label: 'Account B' },
-      { data: [45, 67, 800, 500], label: 'Account C' }
-    ];
-    this.chartLabels = ['January', 'February', 'Mars', 'April'];
-
-    this.computers = [
-      { id: 1, name: "XXX", status: "En service", os: "Windows", version: "XP", architecture: "32-bit", antivirus: "...", manufacturer: "Microsoft", serial: "..." },
-      { id: 2, name: "XXX", status: "New", os: "Windows", version: "XP", architecture: "32-bit", antivirus: "...", manufacturer: "Microsoft", serial: "..." },
-      { id: 3, name: "XXX", status: "En service", os: "Windows", version: "7", architecture: "64-bit", antivirus: "...", manufacturer: "Microsoft", serial: "..." },
-      { id: 4, name: "XXX", status: "En service", os: "Windows", version: "XP", architecture: "32-bit", antivirus: "...", manufacturer: "Microsoft", serial: "..." },
-      { id: 5, name: "XXX", status: "En service", os: "Windows", version: "1709", architecture: "64-bit", antivirus: "...", manufacturer: "Microsoft", serial: "..." },
-      { id: 6, name: "XXX", status: "New", os: "Windows", version: "7", architecture: "32-bit", antivirus: "...", manufacturer: "Microsoft", serial: "..." }
-    ];
+      type: new FormControl("horizontalBar")
+    });
   }
 
   openExportDialog() {
-    let chartUrl: string = document.getElementsByTagName('canvas')[0].toDataURL('image/png');
+    let chartUrl: string = document
+      .getElementsByTagName("canvas")[0]
+      .toDataURL("image/png");
     this.dialog.open(ExportDialogComponent, {
       data: {
-        chartType: this.chartTypeForm.get('type').value,
+        chartType: this.chartTypeForm.get("type").value,
         chartUrl: chartUrl,
-        tableElement: document.getElementById('resultsToConvert')
+        tableElement: document.getElementById("resultsToConvert")
       }
     });
   }
+}
+
+interface ResultsInterface {
+  computers: Object[];
+  chart: { data: Object[]; labels: string[] };
 }

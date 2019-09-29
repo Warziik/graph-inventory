@@ -1,65 +1,80 @@
 <form [formGroup]="chartTypeForm">
-    <mat-form-field style="width: 100%">
-        <mat-label>Type de graphique</mat-label>
-        <mat-select formControlName="type">
-            <mat-option *ngFor="let type of chartTypes" [value]="type.value">
-                {{type.name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+  <mat-form-field style="width: 100%">
+    <mat-label>Type de graphique</mat-label>
+    <mat-select formControlName="type">
+      <mat-option *ngFor="let type of chartTypes" [value]="type.value">
+        {{ type.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 </form>
 <div style="width: 100%;">
-    <canvas baseChart [chartType]="chartTypeForm.value['type']" [datasets]="chartData" [labels]="chartLabels"
-        [options]="chartOptions" [legend]="true">
-    </canvas>
+  <canvas
+    baseChart
+    [chartType]="chartTypeForm.value['type']"
+    [datasets]="chartData"
+    [labels]="chartLabels"
+    [options]="chartOptions"
+    [legend]="true"
+  >
+  </canvas>
 </div>
-<br><br>
+<br /><br />
 <button mat-raised-button color="primary" (click)="openExportDialog()">
-    <mat-icon>get_app</mat-icon> Exporter
+  <mat-icon>get_app</mat-icon> Exporter
 </button>
-<br><br><br>
+<br /><br /><br />
+<p>Total: {{ computers.length }}</p>
 <div id="resultsToConvert">
-    <mat-table [dataSource]="computers" class="mat-elevation-z8">
-        <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-            <mat-cell *matCellDef="let computer"> {{computer.id}} </mat-cell>
-        </ng-container>
+  <mat-table [dataSource]="computers" class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+      <mat-cell *matCellDef="let computer"> {{ computer.id }} </mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef> Nom </mat-header-cell>
-            <mat-cell *matCellDef="let computer"> {{computer.name}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Nom </mat-header-cell>
+      <mat-cell *matCellDef="let computer"> {{ computer.name }} </mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="status">
-            <mat-header-cell *matHeaderCellDef> Statut </mat-header-cell>
-            <mat-cell *matCellDef="let computer"> {{computer.status}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef> Statut </mat-header-cell>
+      <mat-cell *matCellDef="let computer"> {{ computer.status }} </mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="os">
-            <mat-header-cell *matHeaderCellDef> Système d'exploitation </mat-header-cell>
-            <mat-cell *matCellDef="let computer"> {{computer.os}} {{computer.version}} {{computer.architecture}}
-            </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="os">
+      <mat-header-cell *matHeaderCellDef>
+        Système d'exploitation
+      </mat-header-cell>
+      <mat-cell *matCellDef="let computer">
+        {{ computer.os }} {{ computer.version }} {{ computer.architecture }}
+      </mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="antivirus">
-            <mat-header-cell *matHeaderCellDef> Antivirus </mat-header-cell>
-            <mat-cell *matCellDef="let computer"> {{computer.antivirus}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="antivirus">
+      <mat-header-cell *matHeaderCellDef> Antivirus </mat-header-cell>
+      <mat-cell *matCellDef="let computer">
+        {{ computer.antivirus }}
+      </mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="manufacturer">
-            <mat-header-cell *matHeaderCellDef> Fabricant </mat-header-cell>
-            <mat-cell *matCellDef="let computer"> {{computer.manufacturer}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="manufacturer">
+      <mat-header-cell *matHeaderCellDef> Fabricant </mat-header-cell>
+      <mat-cell *matCellDef="let computer">
+        {{ computer.manufacturer }}
+      </mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="serial">
-            <mat-header-cell *matHeaderCellDef> Numéro d'inventaire </mat-header-cell>
-            <mat-cell *matCellDef="let computer"> {{computer.serial}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="serial">
+      <mat-header-cell *matHeaderCellDef>
+        Numéro d'inventaire
+      </mat-header-cell>
+      <mat-cell *matCellDef="let computer"> {{ computer.serial }} </mat-cell>
+    </ng-container>
 
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
 </div>
 
-<br>
+<br />

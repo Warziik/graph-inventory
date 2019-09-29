@@ -39,7 +39,7 @@ export class SearchComponent implements OnInit {
   }
 
   onSubmitForm() {
-    console.log(this.searchForm.value);
+    this.ipcService.send('client:sendSearchValues', this.searchForm.value);
     this.router.navigate(['/results']);
   }
 }
