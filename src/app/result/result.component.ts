@@ -33,6 +33,8 @@ export class ResultComponent implements OnInit {
 
   chartLabels: string[];
 
+  chartColors: Array<Object>;
+
   // Table
   displayedColumns: string[] = [
     "id",
@@ -61,6 +63,17 @@ export class ResultComponent implements OnInit {
         this.computers = data.computers;
         this.chartData = data.chart.data;
         this.chartLabels = data.chart.labels;
+
+        let colors: Array<String> = [];
+        for (let i = 0; i < this.chartLabels.length; i++) {
+          colors.push(this.randomChartColor(i));
+        }
+
+        this.chartColors = [
+          {
+            backgroundColor: colors
+          }
+        ];
       }
     );
 
@@ -80,6 +93,29 @@ export class ResultComponent implements OnInit {
         tableElement: document.getElementById("resultsToConvert")
       }
     });
+  }
+
+  private randomChartColor(i: number): string {
+    const colors: Array<string> = [
+      "#f44336",
+      "#E91E63",
+      "#9C27B0",
+      "#3F51B5",
+      "#2196F3",
+      "#00BCD4",
+      "#009688",
+      "#4CAF50",
+      "#8BC34A",
+      "#CDDC39",
+      "#FFEB3B",
+      "#FFC107",
+      "#FF9800",
+      "#FF5722",
+      "#795548",
+      "#9E9E9E",
+      "#607D8B"
+    ];
+    return colors[i];
   }
 }
 

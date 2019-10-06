@@ -11,6 +11,7 @@
 <div style="width: 100%;">
   <canvas
     baseChart
+    [colors]="chartColors"
     [chartType]="chartTypeForm.value['type']"
     [datasets]="chartData"
     [labels]="chartLabels"

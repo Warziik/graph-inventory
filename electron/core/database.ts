@@ -40,7 +40,7 @@ export default class Database {
   }
 
   public async getResults(args: ValuesInterface): Promise<Object> {
-    let sqlString: string;
+    let sqlString: string, chartSqlString: string;
     const params: Array<number> = [];
 
     sqlString = `SELECT 
@@ -90,21 +90,65 @@ export default class Database {
     sqlString += ` ORDER BY c.id ASC`;
 
     const computers: Object = await this.prepare(sqlString, params).then(
-      results => {
+      (results: Array<mysql2.BinaryRow>) => {
         return results;
       }
     );
 
-    const chart: Object = await new Promise((resolve, reject) => {
-      resolve({
-        data: [
-          { data: [330, 600, 260, 700], label: "Account A" },
-          { data: [120, 455, 100, 340], label: "Account B" },
-          { data: [45, 67, 800, 500], label: "Account C" }
-        ],
-        labels: ["January", "February", "Mars", "April"]
-      });
-    });
+    chartSqlString = `SELECT 
+        os.name os, 
+        osv.name version, 
+        osa.name architecture,
+        COUNT(*) total
+      FROM glpi_computers c
+      LEFT JOIN glpi_items_operatingsystems ios
+        ON c.id = ios.items_id
+      LEFT JOIN glpi_operatingsystems os
+        ON ios.operatingsystems_id = os.id
+      LEFT JOIN glpi_operatingsystemarchitectures osa
+        ON ios.operatingsystemarchitectures_id = osa.id
+      LEFT JOIN glpi_operatingsystemversions osv
+        ON ios.operatingsystemversions_id = osv.id
+      WHERE ios.itemtype = "Computer"
+        AND c.is_deleted = 0
+        AND c.is_template = 0
+        AND ios.operatingsystemarchitectures_id = 1
+      GROUP BY osv.id UNION
+      SELECT 
+        os.name os, 
+        osv.name version, 
+        osa.name architecture,
+        COUNT(*) total
+      FROM glpi_computers c
+      LEFT JOIN glpi_items_operatingsystems ios
+        ON c.id = ios.items_id
+      LEFT JOIN glpi_operatingsystems os
+        ON ios.operatingsystems_id = os.id
+      LEFT JOIN glpi_operatingsystemarchitectures osa
+        ON ios.operatingsystemarchitectures_id = osa.id
+      LEFT JOIN glpi_operatingsystemversions osv
+        ON ios.operatingsystemversions_id = osv.id
+      WHERE ios.itemtype = "Computer"
+        AND c.is_deleted = 0
+        AND c.is_template = 0
+        AND ios.operatingsystemarchitectures_id = 2
+      GROUP BY osv.id`;
+
+    const chart: Object = await this.prepare(chartSqlString, params).then(
+      (results: Array<mysql2.BinaryRow>) => {
+        console.log(results);
+        const labels: Array<String> = [];
+        const values: Array<number> = [];
+        results.forEach(result => {
+          labels.push(`${result.os} ${result.version} ${result.architecture}`);
+          values.push(result.total);
+        });
+        return {
+          data: [{ data: values }],
+          labels: labels
+        };
+      }
+    );
 
     return {
       computers: computers,
