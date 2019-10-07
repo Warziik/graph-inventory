@@ -42,6 +42,7 @@ export class ResultComponent implements OnInit {
     "status",
     "os",
     "antivirus",
+    "antivirusUptodate",
     "manufacturer",
     "serial"
   ];
@@ -59,7 +60,6 @@ export class ResultComponent implements OnInit {
     this.ipcService.on(
       "server:sendResults",
       (event: IpcRendererEvent, data: ResultsInterface) => {
-        console.log(data);
         this.computers = data.computers;
         this.chartData = data.chart.data;
         this.chartLabels = data.chart.labels;
@@ -71,7 +71,8 @@ export class ResultComponent implements OnInit {
 
         this.chartColors = [
           {
-            backgroundColor: colors
+            backgroundColor: colors,
+            borderColor: "#333"
           }
         ];
       }
