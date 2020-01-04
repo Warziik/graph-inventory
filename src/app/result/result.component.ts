@@ -12,6 +12,8 @@ import { IpcRendererEvent } from "electron";
   styleUrls: ["./result.component.scss"]
 })
 export class ResultComponent implements OnInit {
+  isLoading: boolean = true;
+
   // Chart
   chartTypeForm: FormGroup;
 
@@ -81,6 +83,10 @@ export class ResultComponent implements OnInit {
     this.chartTypeForm = new FormGroup({
       type: new FormControl("horizontalBar")
     });
+
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 1000);
   }
 
   openExportDialog() {

@@ -136,7 +136,6 @@ export default class Database {
 
     const chart: Object = await this.prepare(chartSqlString, params).then(
       (results: Array<mysql2.BinaryRow>) => {
-        console.log(results);
         const labels: Array<String> = [];
         const values: Array<number> = [];
         results.forEach(result => {
