@@ -1,16 +1,26 @@
-<h1 *ngIf="isLoading">Chargement...</h1>
+<mat-spinner
+  *ngIf="isLoading"
+  style="position: absolute; top: 40%; left: 43%;"
+></mat-spinner>
+
 <div *ngIf="!isLoading">
-  <a routerLink="">Retour</a>
-  <form [formGroup]="chartTypeForm">
-    <mat-form-field style="width: 100%">
-      <mat-label>Type de graphique</mat-label>
-      <mat-select formControlName="type">
-        <mat-option *ngFor="let type of chartTypes" [value]="type.value">
-          {{ type.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </form>
+  <div style="display: grid; grid-template-columns: min-content 1fr 40% 1fr;">
+    <a routerLink=""
+      ><button mat-mini-fab color="primary">
+        <mat-icon>arrow_back</mat-icon>
+      </button></a
+    >
+    <form [formGroup]="chartTypeForm" style="grid-column: 3 / 4;">
+      <mat-form-field style="width: 100%">
+        <mat-label>Type de graphique</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let type of chartTypes" [value]="type.value">
+            {{ type.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
   <div style="width: 100%;">
     <canvas
       baseChart

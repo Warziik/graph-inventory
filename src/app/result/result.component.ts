@@ -86,7 +86,7 @@ export class ResultComponent implements OnInit {
 
     setTimeout(() => {
       this.isLoading = false;
-    }, 1000);
+    }, 2000);
   }
 
   openExportDialog() {
@@ -95,7 +95,6 @@ export class ResultComponent implements OnInit {
       .toDataURL("image/png");
     this.dialog.open(ExportDialogComponent, {
       data: {
-        chartType: this.chartTypeForm.get("type").value,
         chartUrl: chartUrl,
         tableElement: document.getElementById("resultsToConvert")
       }
