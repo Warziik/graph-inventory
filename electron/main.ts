@@ -4,10 +4,13 @@ import * as url from "url";
 import * as path from "path";
 import Database from "./core/database";
 
-let mainWindow: BrowserWindow;
+let win: BrowserWindow;
+
+// SET ENV
+process.env.NODE_ENV = "devlopment";
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1180,
     height: 720,
     webPreferences: {
@@ -15,7 +18,7 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadURL(
+  win.loadURL(
     url.format({
       pathname: path.join(__dirname, "/../../dist/graph-inventory/index.html"),
       protocol: "file:",
@@ -23,11 +26,15 @@ function createWindow() {
     })
   );
 
-  //Menu.setApplicationMenu(null);
-  mainWindow.webContents.openDevTools();
+  win.webContents.openDevTools();
 
-  mainWindow.on("closed", () => {
-    mainWindow = null;
+  if (process.env.NODE_ENV === "production") {
+    Menu.setApplicationMenu(null);
+    win.webContents.closeDevTools();
+  }
+
+  win.on("closed", () => {
+    win = null;
   });
 }
 
@@ -41,7 +48,7 @@ app.on("window-all-closed", () => {
 });
 
 app.on("activate", () => {
-  if (mainWindow === null) {
+  if (win === null) {
     createWindow();
   }
 });
