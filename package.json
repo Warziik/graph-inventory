@@ -2,7 +2,7 @@
   "name": "graph-inventory",
   "productName": "GraphInventory",
   "version": "0.2.0",
-  "author": "Alex Chesnay <contact@alex-chesnay.fr>",
+  "author": "Alex Chesnay <contact@alex-chesnay.fr> (https://alex-chesnay.fr)",
   "main": "electron/dist/main.js",
   "scripts": {
     "ng": "ng",

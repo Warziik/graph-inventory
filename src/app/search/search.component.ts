@@ -11,6 +11,8 @@ import { IpcRendererEvent } from 'electron';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+  isLoading: boolean = true;
+
   searchForm: FormGroup;
 
   oses: Object[];
@@ -19,23 +21,42 @@ export class SearchComponent implements OnInit {
 
   versions: Object[];
 
+  servicepacks: Object[];
+
+  statuses: Object[];
+
+  antivitures: Object[];
+
+  groups: Object[];
+
   constructor(private titleService: Title, private router: Router, private ipcService: IpcService) {
     this.titleService.setTitle("Rechercher");
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.ipcService.on('server:sendDefaultFormValues', (event: IpcRendererEvent, data: any) => {
       this.oses = data.oses;
       this.architectures = data.architectures;
       this.versions = data.versions;
+      this.statuses = data.statuses;
+      this.servicepacks = data.servicepacks;
+      this.groups = data.groups;
     })
     this.ipcService.send('client:retriveDefaultFormValues');
 
     this.searchForm = new FormGroup({
       os: new FormControl(''),
       architecture: new FormControl(''),
-      version: new FormControl('')
+      version: new FormControl(''),
+      servicepack: new FormControl(''),
+      status: new FormControl(''),
+      antivirus: new FormControl(''),
+      group: new FormControl('')
     })
+
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 1000);
   }
 
   onSubmitForm() {

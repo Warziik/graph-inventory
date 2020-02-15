@@ -1,15 +1,10 @@
-<mat-spinner
-  *ngIf="isLoading"
-  style="position: absolute; top: 40%; left: 43%;"
-></mat-spinner>
+<mat-spinner *ngIf="isLoading" style="position: absolute; top: 40%; left: 40%;"></mat-spinner>
 
 <div *ngIf="!isLoading">
   <div style="display: grid; grid-template-columns: min-content 1fr 40% 1fr;">
-    <a routerLink=""
-      ><button mat-mini-fab color="primary">
+    <a routerLink=""><button mat-mini-fab color="primary">
         <mat-icon>arrow_back</mat-icon>
-      </button></a
-    >
+      </button></a>
     <form [formGroup]="chartTypeForm" style="grid-column: 3 / 4;">
       <mat-form-field style="width: 100%">
         <mat-label>Type de graphique</mat-label>
@@ -22,15 +17,8 @@
     </form>
   </div>
   <div style="width: 100%;">
-    <canvas
-      baseChart
-      [colors]="chartColors"
-      [chartType]="chartTypeForm.value['type']"
-      [datasets]="chartData"
-      [labels]="chartLabels"
-      [options]="chartOptions"
-      [legend]="true"
-    >
+    <canvas baseChart [colors]="chartColors" [chartType]="chartTypeForm.value['type']" [datasets]="chartData"
+      [labels]="chartLabels" [options]="chartOptions" [legend]="true">
     </canvas>
   </div>
   <br /><br />
@@ -79,8 +67,7 @@
       <ng-container matColumnDef="antivirusUptodate">
         <mat-header-cell *matHeaderCellDef> Antivirus à jour </mat-header-cell>
         <mat-cell *matCellDef="let computer">
-          <mat-chip
-            >{{ computer.antivirusUptodate == 1 ? "Oui" : "Non" }}
+          <mat-chip>{{ computer.antivirusUptodate == 1 ? "Oui" : "Non" }}
           </mat-chip>
         </mat-cell>
       </ng-container>

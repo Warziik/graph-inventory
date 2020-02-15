@@ -5,7 +5,7 @@ export default class Database {
   private static _instance: Database | undefined;
   private _connection: mysql2.Connection | undefined;
 
-  constructor(private config) {}
+  constructor(private config) { }
 
   public static get instance(): Database {
     if (!Database._instance) {
@@ -80,11 +80,31 @@ export default class Database {
     if (args.version) {
       sqlString += ` AND ios.operatingsystemversions_id = ?`;
       params.push(args.version);
+
+      if (args.servicepack && (args.version === 1 || args.version === 5)) {
+        sqlString += ` AND ios.operatingsystemservicepacks_id = ?`;
+        params.push(args.servicepack);
+      }
     }
 
     if (args.architecture) {
       sqlString += ` AND ios.operatingsystemarchitectures_id = ?`;
       params.push(args.architecture);
+    }
+
+    if (args.status) {
+      sqlString += ` AND c.states_id = ?`;
+      params.push(args.status);
+    }
+
+    if (args.antivirus) {
+      sqlString += ` AND av.is_uptodate = ?`;
+      params.push(args.antivirus);
+    }
+
+    if (args.group) {
+      sqlString += ` AND c.groups_id = ?`;
+      params.push(args.group);
     }
 
     sqlString += ` ORDER BY c.id ASC`;
@@ -156,7 +176,7 @@ export default class Database {
   }
 
   public async retrieveDefaultFormValues(): Promise<Object> {
-    let oses: Object, architectures: Object, versions: Object;
+    let oses: Object, architectures: Object, versions: Object, statuses: Object, servicepacks: Object, groups: Object;
     await this.query("SELECT id, name FROM glpi_operatingsystems")
       .then(osesResults => {
         oses = osesResults;
@@ -168,23 +188,29 @@ export default class Database {
         architectures = architecturesResults;
         return this.query("SELECT id, name FROM glpi_operatingsystemversions");
       })
-      .then(
-        versionsResults => {
-          versions = versionsResults;
-          //this.close();
-        },
+      .then(versionsResults => {
+        versions = versionsResults;
+        return this.query("SELECT id, name FROM glpi_states");
+      })
+      .then(statusesResults => {
+        statuses = statusesResults;
+        return this.query("SELECT id, name FROM glpi_operatingsystemservicepacks");
+      })
+      .then(servicepacksResults => {
+        servicepacks = servicepacksResults;
+        return this.query("SELECT id, name FROM glpi_groups");
+      })
+      .then(groupsResults => {
+        groups = groupsResults;
+        //this.clsoe()
+      },
         err =>
           this.close().then(_ => {
             throw err;
           })
       );
 
-    let data: Object = {
-      oses: oses,
-      architectures: architectures,
-      versions: versions
-    };
-    return data;
+    return { oses, architectures, versions, statuses, servicepacks, groups };
   }
 
   private query(sql: string, args?) {
@@ -219,4 +245,8 @@ interface ValuesInterface {
   os: number | null;
   architecture: number | null;
   version: number | null;
+  servicepack: number | null;
+  antivirus: number | null;
+  status: number | null;
+  group: number | null;
 }

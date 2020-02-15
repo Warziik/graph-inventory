@@ -25,7 +25,7 @@ export class IpcService {
    * @param channel 
    * @param listener 
    */
-  public on(channel: string, listener: any): void {
+  public on(channel: string, listener: any): Promise<any> {
     if (!this._ipc) {
       return;
     }

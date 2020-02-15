@@ -1,30 +1,71 @@
-<form [formGroup]="searchForm" (ngSubmit)="onSubmitForm()">
-    <mat-form-field style="width: 100%">
-        <mat-label>Système d'exploitation</mat-label>
-        <mat-select formControlName="os">
-            <mat-option *ngFor="let os of oses" [value]="os.id">
+      <mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="position: absolute; top: 50%; width: 83%;">
+      </mat-progress-bar>
+
+      <form *ngIf="!isLoading" [formGroup]="searchForm" (ngSubmit)="onSubmitForm()">
+        <div class="box">
+          <mat-form-field>
+            <mat-label>Système d'exploitation</mat-label>
+            <mat-select formControlName="os">
+              <mat-option *ngFor="let os of oses" [value]="os.id">
                 {{os.name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field style="width: 100%">
-        <mat-label>Architecture</mat-label>
-        <mat-select formControlName="architecture">
-            <mat-option *ngFor="let architecture of architectures" [value]="architecture.id">
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Architecture</mat-label>
+            <mat-select formControlName="architecture">
+              <mat-option *ngFor="let architecture of architectures" [value]="architecture.id">
                 {{architecture.name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field style="width: 100%">
-        <mat-label>Version</mat-label>
-        <mat-select formControlName="version">
-            <mat-option *ngFor="let version of versions" [value]="version.id">
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Version</mat-label>
+            <mat-select formControlName="version">
+              <mat-option *ngFor="let version of versions" [value]="version.id">
                 {{version.name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <p align="center"><button type="submit" mat-raised-button color="primary">
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Service Pack</mat-label>
+            <mat-select formControlName="servicepack" [disabled]="searchForm.get('version').value !== 1">
+              <mat-option *ngFor="let servicepack of servicepacks" [value]="servicepack.id">
+                {{servicepack.name}}
+              </mat-option>
+            </mat-select>
+            <mat-hint>Uniquement disponible pour Windows 7 et Windows XP.</mat-hint>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Statut</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let status of statuses" [value]="status.id">
+                {{status.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Antivirus à jour</mat-label>
+            <mat-select formControlName="antivirus">
+              <mat-option value="1">
+                Oui
+              </mat-option>
+              <mat-option value="0">
+                Non
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Groupe</mat-label>
+            <mat-select formControlName="group">
+              <mat-option *ngFor="let group of groups" [value]="group.id">
+                {{group.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <p align="center"><button type="submit" mat-raised-button color="primary">
             <mat-icon>search</mat-icon>
             Rechercher
-        </button></p>
-</form>
+          </button></p>
+      </form>

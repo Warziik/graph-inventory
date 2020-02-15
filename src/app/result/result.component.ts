@@ -48,6 +48,7 @@ export class ResultComponent implements OnInit {
     "manufacturer",
     "serial"
   ];
+
   computers: Object[];
 
   constructor(
@@ -74,7 +75,7 @@ export class ResultComponent implements OnInit {
         this.chartColors = [
           {
             backgroundColor: colors,
-            borderColor: "#333"
+            borderColor: "#777"
           }
         ];
       }
@@ -90,12 +91,9 @@ export class ResultComponent implements OnInit {
   }
 
   openExportDialog() {
-    let chartUrl: string = document
-      .getElementsByTagName("canvas")[0]
-      .toDataURL("image/png");
     this.dialog.open(ExportDialogComponent, {
       data: {
-        chartUrl: chartUrl,
+        chartUrl: document.getElementsByTagName("canvas")[0].toDataURL("image/png"),
         tableElement: document.getElementById("resultsToConvert")
       }
     });

@@ -7,7 +7,7 @@ import Database from "./core/database";
 let win: BrowserWindow;
 
 // SET ENV
-process.env.NODE_ENV = "devlopment";
+process.env.NODE_ENV = "development";
 
 function createWindow() {
   win = new BrowserWindow({
