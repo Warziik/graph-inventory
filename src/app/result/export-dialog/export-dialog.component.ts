@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatSnackBar } from "@angular/material";
+import { MAT_DIALOG_DATA } from "@angular/material";
 import html2canvas from "html2canvas";
 import jsPDF from 'jspdf';
+import { Notification } from 'electron';
 
 @Component({
   selector: "app-export-dialog",
@@ -17,15 +18,12 @@ export class ExportDialogComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   ngOnInit() {
-    // Génération des PNG
+    this.chartUrl = this.data.chartUrl;
     html2canvas(this.data.tableElement).then(canvas => {
       this.tableUrl = canvas.toDataURL("image/png");
     });
-    this.chartUrl = this.data.chartUrl;
 
-    // Génération du PDF
     this.docPdf = new jsPDF();
-    this.docPdf.setFontSize(30);
     this.docPdf.addImage(this.chartUrl, "PNG", 10, 10, 190, 120);
     this.docPdf.addPage();
     this.docPdf.addImage(this.tableUrl, "PNG", 10, 10, 190, 500);

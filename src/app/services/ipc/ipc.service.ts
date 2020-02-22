@@ -33,6 +33,17 @@ export class IpcService {
   }
 
   /**
+  * @param channel
+  * @param args
+  */
+  public invoke(channel: string, ...args: any[]): Promise<any> {
+    if (!this._ipc) {
+      return;
+    }
+    return this._ipc.invoke(channel, ...args);
+  }
+
+  /**
    * Émetteur d'évènements écoutés par la serveur
    * @param channel 
    * @param args 

@@ -25,7 +25,13 @@
 }
 
 .container {
-    margin: 0 auto;
-    width: 980px;
-    padding-top: 10px;
+  margin: 0 auto;
+  width: 980px;
+  padding-top: 10px;
+}
+
+.box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
 }

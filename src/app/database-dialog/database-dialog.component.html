@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>Connexion à la base de données</h2>
+
+<form mat-dialog-content [formGroup]="databaseForm" (ngSubmit)="onSubmitForm()">
+  <div class="box">
+    <mat-form-field>
+      <mat-label>Hôte</mat-label>
+      <input matInput type="text" formControlName="host">
+      <button mat-button *ngIf="host.value" matSuffix mat-icon-button (click)="host.setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Nom d'utilisateur</mat-label>
+      <input matInput type="text" formControlName="username">
+      <button mat-button *ngIf="username.value" matSuffix mat-icon-button (click)="username.setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Mot de passe</mat-label>
+      <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+      <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <button mat-button *ngIf="password.value" matSuffix mat-icon-button (click)="password.setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Nom de la base de données</mat-label>
+      <input matInput type="text" formControlName="dbname">
+      <button mat-button *ngIf="dbname.value" matSuffix mat-icon-button (click)="dbname.setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <p align="center"><button type="submit" mat-raised-button color="primary" [disabled]="!databaseForm.valid">
+      <mat-icon>perm_identity</mat-icon>
+      Se connecter
+    </button></p>
+</form>

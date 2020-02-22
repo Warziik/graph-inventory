@@ -1,10 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { FormGroup, FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material";
 import { ExportDialogComponent } from "./export-dialog/export-dialog.component";
-import { IpcService } from "../services/ipc/ipc.service";
-import { IpcRendererEvent } from "electron";
+import { DataService } from '../services/data.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: "app-result",
@@ -53,41 +53,41 @@ export class ResultComponent implements OnInit {
 
   constructor(
     private titleService: Title,
-    private ipcService: IpcService,
-    public dialog: MatDialog
+    private dataService: DataService,
+    public dialog: MatDialog,
+    private route: ActivatedRoute
   ) {
     this.titleService.setTitle("Résultats");
   }
 
   ngOnInit() {
-    this.ipcService.on(
-      "server:sendResults",
-      (event: IpcRendererEvent, data: ResultsInterface) => {
-        this.computers = data.computers;
-        this.chartData = data.chart.data;
-        this.chartLabels = data.chart.labels;
+    this.route.queryParams.subscribe(params => {
+      this.dataService.sendSearchValues(params)
+        .then((data: ResultsInterface) => {
+          this.computers = data.computers;
+          this.chartData = data.chart.data;
+          this.chartLabels = data.chart.labels;
 
-        let colors: Array<String> = [];
-        for (let i = 0; i < this.chartLabels.length; i++) {
-          colors.push(this.randomChartColor(i));
-        }
-
-        this.chartColors = [
-          {
-            backgroundColor: colors,
-            borderColor: "#777"
+          let colors: Array<String> = [];
+          for (let i = 0; i < this.chartLabels.length; i++) {
+            colors.push(this.randomChartColor(i));
           }
-        ];
-      }
-    );
 
-    this.chartTypeForm = new FormGroup({
-      type: new FormControl("horizontalBar")
-    });
+          this.chartColors = [
+            {
+              backgroundColor: colors,
+              borderColor: "#777"
+            }
+          ];
 
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 2000);
+          this.chartTypeForm = new FormGroup({
+            type: new FormControl("horizontalBar")
+          });
+
+          this.isLoading = false;
+        })
+        .catch(err => console.error);
+    })
   }
 
   openExportDialog() {

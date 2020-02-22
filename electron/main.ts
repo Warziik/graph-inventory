@@ -3,11 +3,23 @@ import { app, BrowserWindow, Menu, ipcMain, IpcMainEvent } from "electron";
 import * as url from "url";
 import * as path from "path";
 import Database from "./core/database";
+import Store from "./core/store";
+
+const db: Database = new Database();
+const store: Store = new Store({
+  configName: 'user-preferences',
+  defaults: {}
+});
 
 let win: BrowserWindow;
 
 // SET ENV
 process.env.NODE_ENV = "development";
+
+// Vérifie si les informations de connexion à la base de données ont déjà été assignées
+if (store.has('databaseCredentials')) {
+  db.init(store.get('databaseCredentials'));
+}
 
 function createWindow() {
   win = new BrowserWindow({
@@ -53,24 +65,25 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.on(
-  "client:retriveDefaultFormValues",
-  async (event: IpcMainEvent, ...args: any[]) => {
-    let data = await Database.instance
-      .retrieveDefaultFormValues()
-      .then(results => results)
-      .catch(console.error);
-    event.sender.send("server:sendDefaultFormValues", data);
-  }
-);
+ipcMain.handle('client:requestDatabaseStatus', (event: IpcMainEvent, ...args: any[]) => {
+  return store.has('databaseCredentials');
+})
 
-ipcMain.on(
-  "client:sendSearchValues",
-  async (event: IpcMainEvent, ...args: any[]) => {
-    let data = await Database.instance
-      .getResults(args[0])
-      .then(results => results)
-      .catch(console.error);
-    event.sender.send("server:sendResults", data);
-  }
-);
+ipcMain.handle('client:sendDatabaseCredentials', (event: IpcMainEvent, ...args: any[]) => {
+  store.set('databaseCredentials', args[0]);
+  return db.init(store.get('databaseCredentials'));
+})
+
+ipcMain.handle('client:requestFormValues', async (event: IpcMainEvent, ...args: any[]) => {
+  return await db
+    .retrieveDefaultFormValues()
+    .then(results => results)
+    .catch(console.error)
+})
+
+ipcMain.handle('client:sendSearchValues', async (event: IpcMainEvent, ...args: any[]) => {
+  return await db
+    .getResults(args[0])
+    .then(results => results)
+    .catch(console.error);
+})

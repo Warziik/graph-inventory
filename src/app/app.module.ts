@@ -11,15 +11,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ResultComponent } from './result/result.component';
 import { ExportDialogComponent } from './result/export-dialog/export-dialog.component';
 import { IpcService } from './services/ipc/ipc.service';
+import { DatabaseDialogComponent } from './database-dialog/database-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     ResultComponent,
-    ExportDialogComponent
+    ExportDialogComponent,
+    DatabaseDialogComponent
   ],
-  entryComponents: [ExportDialogComponent],
+  entryComponents: [ExportDialogComponent, DatabaseDialogComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
