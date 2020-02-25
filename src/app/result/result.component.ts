@@ -62,7 +62,7 @@ export class ResultComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.dataService.sendSearchValues(params)
+      this.dataService.getResults(params)
         .then((data: ResultsInterface) => {
           this.computers = data.computers;
           this.chartData = data.chart.data;
@@ -94,7 +94,8 @@ export class ResultComponent implements OnInit {
     this.dialog.open(ExportDialogComponent, {
       data: {
         chartUrl: document.getElementsByTagName("canvas")[0].toDataURL("image/png"),
-        tableElement: document.getElementById("resultsToConvert")
+        tableElement: document.getElementById('resultsToConvert'),
+        tableData: this.computers
       }
     });
   }

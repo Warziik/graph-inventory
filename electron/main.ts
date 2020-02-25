@@ -81,7 +81,7 @@ ipcMain.handle('client:requestFormValues', async (event: IpcMainEvent, ...args: 
     .catch(console.error)
 })
 
-ipcMain.handle('client:sendSearchValues', async (event: IpcMainEvent, ...args: any[]) => {
+ipcMain.handle('client:requestResults', async (event: IpcMainEvent, ...args: any[]) => {
   return await db
     .getResults(args[0])
     .then(results => results)

@@ -46,7 +46,7 @@ export class SearchComponent implements OnInit {
           os: new FormControl(1),
           architecture: new FormControl(''),
           version: new FormControl(''),
-          servicepack: new FormControl({ value: '', disabled: true }),
+          servicepack: new FormControl(''),
           status: new FormControl(''),
           antivirus: new FormControl(''),
           group: new FormControl('')

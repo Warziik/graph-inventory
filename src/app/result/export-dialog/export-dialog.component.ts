@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material";
-import html2canvas from "html2canvas";
+import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { Notification } from 'electron';
+import 'jspdf-autotable';
 
 @Component({
   selector: "app-export-dialog",
@@ -11,9 +11,9 @@ import { Notification } from 'electron';
 })
 export class ExportDialogComponent implements OnInit {
 
-  tableUrl: string = "";
-  chartUrl: string = "";
-  docPdf: any;
+  chartUrl: string;
+  tableUrl: string;
+  docPdf: jsPDF;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
@@ -23,18 +23,47 @@ export class ExportDialogComponent implements OnInit {
       this.tableUrl = canvas.toDataURL("image/png");
     });
 
-    this.docPdf = new jsPDF();
-    this.docPdf.addImage(this.chartUrl, "PNG", 10, 10, 190, 120);
+    let data: Array<any> = [];
+    this.data.tableData.map(computer => {
+      delete computer.antivirusUptodate;
+      computer.os = `${computer.os} ${computer.version} ${computer.architecture}`;
+      delete computer.version;
+      delete computer.architecture;
+      data.push(Object.values(computer));
+    })
+
+    this.docPdf = new jsPDF('landscape');
+    this.docPdf.addImage(this.chartUrl, "PNG", 10, 10, 280, 150);
     this.docPdf.addPage();
-    this.docPdf.addImage(this.tableUrl, "PNG", 10, 10, 190, 500);
+    this.docPdf.autoTable({
+      head: [['#', 'Nom', 'Numéro d\'inventaire', 'Statut', 'Fabricant', 'Version d\'antivirus', 'Système d\'exploitation']], body: data
+    })
+  }
+
+  onExportChart() {
+    Notification.requestPermission().then(() => {
+      new Notification('Export du graphique', { body: 'Le graphique a été exporté avec succès.', icon: 'assets/icons/notification_chart.png' })
+    })
+  }
+
+  onExportTable() {
+    Notification.requestPermission().then(() => {
+      new Notification('Export du tableau', { body: 'Le tableau a été exporté avec succès.', icon: 'assets/icons/notification_table.png' })
+    })
   }
 
   onExportPdf(): void {
-    this.docPdf.save('rapport.pdf');
+    this.docPdf.save('rapport.pdf', { returnPromise: true })
+      .then(() => {
+        Notification.requestPermission().then(() => {
+          new Notification('Export PDF', { body: 'Le document PDF a été exporté avec succès.', icon: 'assets/icons/notification_pdf.png' })
+        })
+      });
   }
 }
 
 interface DialogData {
   chartUrl: string;
   tableElement: HTMLElement;
+  tableData: Array<{ id: number, name: string, status: string, os: string, version: string, architecture: string, antivirusUptodate: string, antivirusVersion: string, manufacturer: string, serial: string }>;
 }

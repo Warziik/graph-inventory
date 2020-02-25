@@ -16,8 +16,8 @@ export class DataService {
     return this.ipcService.invoke('client:requestFormValues');
   }
 
-  sendSearchValues(value: any): Promise<any> {
-    return this.ipcService.invoke('client:sendSearchValues', value);
+  getResults(value: any): Promise<any> {
+    return this.ipcService.invoke('client:requestResults', value);
   }
 
   sendDatabaseCredentials(value: any): Promise<any> {

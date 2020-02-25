@@ -3,7 +3,8 @@
 
 <div *ngIf="!isLoading">
   <div style="display: grid; grid-template-columns: min-content 1fr 40% 1fr;">
-    <a routerLink=""><button mat-mini-fab color="primary">
+    <a routerLink=""><button mat-mini-fab color="primary" matTooltip="Renvoie au formulaire de recherche"
+        matTooltipPosition="below">
         <mat-icon>arrow_back</mat-icon>
       </button></a>
     <form [formGroup]="chartTypeForm" style="grid-column: 3 / 4;">
@@ -26,71 +27,68 @@
   <button mat-raised-button color="primary" (click)="openExportDialog()">
     <mat-icon>get_app</mat-icon> Exporter
   </button>
-  <br /><br /><br />
+  <br /><br />
   <p>Total: {{ computers.length }}</p>
-  <div id="resultsToConvert">
-    <mat-table [dataSource]="computers" class="mat-elevation-z8">
-      <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-        <mat-cell *matCellDef="let computer"> {{ computer.id }} </mat-cell>
-      </ng-container>
+  <mat-table id="resultsToConvert" [dataSource]="computers" class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+      <mat-cell *matCellDef="let computer"> {{ computer.id }} </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef> Nom </mat-header-cell>
-        <mat-cell *matCellDef="let computer"> {{ computer.name }} </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Nom </mat-header-cell>
+      <mat-cell *matCellDef="let computer"> {{ computer.name }} </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef> Statut </mat-header-cell>
-        <mat-cell *matCellDef="let computer">
-          <mat-chip>{{ computer.status }}</mat-chip>
-        </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef> Statut </mat-header-cell>
+      <mat-cell *matCellDef="let computer">
+        <mat-chip>{{ computer.status }}</mat-chip>
+      </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="os">
-        <mat-header-cell *matHeaderCellDef>
-          Système d'exploitation
-        </mat-header-cell>
-        <mat-cell *matCellDef="let computer">
-          {{ computer.os }} {{ computer.version }} {{ computer.architecture }}
-        </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="os">
+      <mat-header-cell *matHeaderCellDef>
+        Système d'exploitation
+      </mat-header-cell>
+      <mat-cell *matCellDef="let computer">
+        {{ computer.os }} {{ computer.version }} {{ computer.architecture }}
+      </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="antivirus">
-        <mat-header-cell *matHeaderCellDef>
-          Version d'antivirus
-        </mat-header-cell>
-        <mat-cell *matCellDef="let computer">
-          {{ computer.antivirusVersion }}
-        </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="antivirus">
+      <mat-header-cell *matHeaderCellDef>
+        Version d'antivirus
+      </mat-header-cell>
+      <mat-cell *matCellDef="let computer">
+        {{ computer.antivirusVersion }}
+      </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="antivirusUptodate">
-        <mat-header-cell *matHeaderCellDef> Antivirus à jour </mat-header-cell>
-        <mat-cell *matCellDef="let computer">
-          <mat-chip>{{ computer.antivirusUptodate == 1 ? "Oui" : "Non" }}
-          </mat-chip>
-        </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="antivirusUptodate">
+      <mat-header-cell *matHeaderCellDef> Antivirus à jour </mat-header-cell>
+      <mat-cell *matCellDef="let computer">
+        <mat-chip>{{ computer.antivirusUptodate == 1 ? "Oui" : "Non" }}
+        </mat-chip>
+      </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="manufacturer">
-        <mat-header-cell *matHeaderCellDef> Fabricant </mat-header-cell>
-        <mat-cell *matCellDef="let computer">
-          {{ computer.manufacturer }}
-        </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="manufacturer">
+      <mat-header-cell *matHeaderCellDef> Fabricant </mat-header-cell>
+      <mat-cell *matCellDef="let computer">
+        {{ computer.manufacturer }}
+      </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="serial">
-        <mat-header-cell *matHeaderCellDef>
-          Numéro d'inventaire
-        </mat-header-cell>
-        <mat-cell *matCellDef="let computer"> {{ computer.serial }} </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="serial">
+      <mat-header-cell *matHeaderCellDef>
+        Numéro d'inventaire
+      </mat-header-cell>
+      <mat-cell *matCellDef="let computer"> {{ computer.serial }} </mat-cell>
+    </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-    </mat-table>
-  </div>
-
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
   <br />
 </div>
