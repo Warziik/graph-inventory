@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, ipcMain, IpcMainEvent } from "electron";
+import { app, BrowserWindow, Menu, ipcMain, IpcMainEvent, nativeTheme } from "electron";
 
 import * as url from "url";
 import * as path from "path";
@@ -14,12 +14,23 @@ const store: Store = new Store({
 let win: BrowserWindow;
 
 // SET ENV
-process.env.NODE_ENV = "development";
+process.env.NODE_ENV = "devlopment";
 
 // Vérifie si les informations de connexion à la base de données ont déjà été assignées
 if (store.has('databaseCredentials')) {
   db.init(store.get('databaseCredentials'));
 }
+
+// Vérifie si l'utilisateur a déjà choisi un thème
+if (!store.has('useDarkTheme')) {
+  store.set('useDarkTheme', nativeTheme.shouldUseDarkColors);
+}
+
+// Évènement appelé lorsque le thème du système d'exploitation change
+nativeTheme.on('updated', () => {
+  console.log(`NATIVE THEME UPDATED - useDarkTheme: ${nativeTheme.shouldUseDarkColors}`);
+  store.set('useDarkTheme', nativeTheme.shouldUseDarkColors);
+})
 
 function createWindow() {
   win = new BrowserWindow({
@@ -65,8 +76,10 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.handle('client:requestDatabaseStatus', (event: IpcMainEvent, ...args: any[]) => {
-  return store.has('databaseCredentials');
+ipcMain.handle('client:requestUserPreferences', (event: IpcMainEvent, ...args: any[]) => {
+  const databaseConnected: boolean = store.has('databaseCredentials');
+  const useDarkTheme: boolean = store.get('useDarkTheme');
+  return { databaseConnected, useDarkTheme };
 })
 
 ipcMain.handle('client:sendDatabaseCredentials', (event: IpcMainEvent, ...args: any[]) => {
@@ -86,4 +99,8 @@ ipcMain.handle('client:requestResults', async (event: IpcMainEvent, ...args: any
     .getResults(args[0])
     .then(results => results)
     .catch(console.error);
+})
+
+ipcMain.on('client:updateTheme', (event: IpcMainEvent, ...args: any[]) => {
+  store.set('useDarkTheme', args[0]);
 })

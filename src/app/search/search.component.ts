@@ -46,13 +46,22 @@ export class SearchComponent implements OnInit {
           os: new FormControl(1),
           architecture: new FormControl(''),
           version: new FormControl(''),
-          servicepack: new FormControl(''),
+          servicepack: new FormControl({ value: '', disabled: true }),
           status: new FormControl(''),
           antivirus: new FormControl(''),
           group: new FormControl('')
         })
 
         this.isLoading = false;
+
+        this.searchForm.get('version').valueChanges
+          .subscribe(selectedVersion => {
+            if (selectedVersion === 1 || selectedVersion === 5) {
+              this.searchForm.get('servicepack').enable();
+            } else {
+              this.searchForm.get('servicepack').disable();
+            }
+          })
       })
       .catch(err => console.error);
   }

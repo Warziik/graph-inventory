@@ -1,3 +1,8 @@
-<div class="container">
-  <router-outlet *ngIf="databaseConnected"></router-outlet>
+<div [ngClass]="{'dark-theme': isDarkTheme | async}">
+  <div class="mat-app-background">
+    <app-toolbar></app-toolbar>
+    <div class="container">
+      <router-outlet *ngIf="databaseConnected"></router-outlet>
+    </div>
+  </div>
 </div>

@@ -12,6 +12,7 @@ import { ResultComponent } from './result/result.component';
 import { ExportDialogComponent } from './result/export-dialog/export-dialog.component';
 import { IpcService } from './services/ipc/ipc.service';
 import { DatabaseDialogComponent } from './database-dialog/database-dialog.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { DatabaseDialogComponent } from './database-dialog/database-dialog.compo
     SearchComponent,
     ResultComponent,
     ExportDialogComponent,
-    DatabaseDialogComponent
+    DatabaseDialogComponent,
+    ToolbarComponent
   ],
   entryComponents: [ExportDialogComponent, DatabaseDialogComponent],
   imports: [

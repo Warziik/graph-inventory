@@ -13,7 +13,10 @@ import {
     MatTableModule,
     MatChipsModule,
     MatTabsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSlideToggleModule,
+    MatToolbarModule,
+    MatMenuModule
 } from '@angular/material';
 import { A11yModule } from '@angular/cdk/a11y';
 import { BidiModule } from '@angular/cdk/bidi';
@@ -52,7 +55,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
         MatTableModule,
         MatChipsModule,
         MatTabsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatSlideToggleModule,
+        MatToolbarModule,
+        MatMenuModule
     ]
 })
 export class MaterialModule { }

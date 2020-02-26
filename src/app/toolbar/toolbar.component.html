@@ -1,0 +1,16 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row class="toolbar__content">
+    <span>GraphInventory</span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </mat-toolbar-row>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>brightness_4</mat-icon>
+      <mat-slide-toggle color="primary" [checked]="isDarkTheme | async" (change)="toggleDarkTheme($event.checked)">Thème
+        sombre
+      </mat-slide-toggle>
+    </button>
+  </mat-menu>
+</mat-toolbar>

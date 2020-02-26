@@ -8,8 +8,8 @@ export class DataService {
 
   constructor(private ipcService: IpcService) { }
 
-  getDatabaseStatus(): Promise<any> {
-    return this.ipcService.invoke('client:requestDatabaseStatus');
+  getUserPreferences(): Promise<any> {
+    return this.ipcService.invoke('client:requestUserPreferences');
   }
 
   getDefaultFormValues(): Promise<any> {
@@ -22,5 +22,9 @@ export class DataService {
 
   sendDatabaseCredentials(value: any): Promise<any> {
     return this.ipcService.invoke('client:sendDatabaseCredentials', value);
+  }
+
+  updateTheme(value: boolean): void {
+    this.ipcService.send('client:updateTheme', value);
   }
 }

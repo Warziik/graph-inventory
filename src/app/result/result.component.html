@@ -28,7 +28,7 @@
     <mat-icon>get_app</mat-icon> Exporter
   </button>
   <br /><br />
-  <p>Total: {{ computers.length }}</p>
+  <p class="mat-body">Total: {{ computers.length }}</p>
   <mat-table id="resultsToConvert" [dataSource]="computers" class="mat-elevation-z8">
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
