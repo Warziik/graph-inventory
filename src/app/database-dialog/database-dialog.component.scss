@@ -1,7 +1,5 @@
-.alert-error {
-  background-color: tomato;
-  color: #FFF;
-  border-radius: 7px;
-  padding: 10px 20px;
-  font-family: inherit;
+.databaseBox {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
 }

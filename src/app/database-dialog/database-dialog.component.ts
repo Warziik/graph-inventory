@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatSnackBar, MatDialogRef } from '@angular/material';
 import { DataService } from '../services/data.service';
 
@@ -16,7 +16,7 @@ export class DatabaseDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<DatabaseDialogComponent>, private dataService: DataService, private snackbar: MatSnackBar) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.databaseForm = new FormGroup({
       host: new FormControl('localhost', Validators.required),
       username: new FormControl('root', Validators.required),
@@ -25,33 +25,31 @@ export class DatabaseDialogComponent implements OnInit {
     });
   }
 
-  get host() {
+  get host(): AbstractControl {
     return this.databaseForm.get('host');
   }
 
-  get username() {
+  get username(): AbstractControl {
     return this.databaseForm.get('username');
   }
 
-  get password() {
+  get password(): AbstractControl {
     return this.databaseForm.get('password');
   }
 
-  get dbname() {
+  get dbname(): AbstractControl {
     return this.databaseForm.get('dbname');
   }
 
-  onSubmitForm() {
+  onSubmitForm(): void {
     this.dataService.sendDatabaseCredentials(this.databaseForm.value)
-      .then((success: boolean) => {
-        if (!success) {
-          this.snackbar.open('Échec de la connexion à la base de données.', null, {
-            duration: 4000
-          });
-        } else {
-          this.dialogRef.close();
-        }
+      .then(() => {
+        this.dialogRef.close();
       })
-      .catch(err => console.error)
+      .catch(() => {
+        this.snackbar.open('Échec de la connexion à la base de données.', null, {
+          duration: 4000
+        });
+      })
   }
 }

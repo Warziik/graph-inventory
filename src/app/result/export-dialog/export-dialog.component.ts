@@ -20,23 +20,24 @@ export class ExportDialogComponent implements OnInit {
   ngOnInit() {
     this.chartUrl = this.data.chartUrl;
     html2canvas(this.data.tableElement).then(canvas => {
-      this.tableUrl = canvas.toDataURL("image/png");
+      this.tableUrl = canvas.toDataURL('image/png');
     });
 
-    let data: Array<any> = [];
-    this.data.tableData.map(computer => {
-      delete computer.antivirusUptodate;
-      computer.os = `${computer.os} ${computer.version} ${computer.architecture}`;
-      delete computer.version;
-      delete computer.architecture;
-      data.push(Object.values(computer));
+    let computers: Array<Object> = [];
+    this.data.tableData.forEach(computer => {
+      if (computer.antivirusUptodate == '1') {
+        computer.antivirusUptodate = 'Oui';
+      } else {
+        computer.antivirusUptodate = 'Non';
+      }
+      computers.push(Object.values(computer));
     })
 
     this.docPdf = new jsPDF('landscape');
-    this.docPdf.addImage(this.chartUrl, "PNG", 10, 10, 280, 150);
+    this.docPdf.addImage(this.chartUrl, "PNG", 10, 10, 269.25, 134.5); // 280, 150
     this.docPdf.addPage();
     this.docPdf.autoTable({
-      head: [['#', 'Nom', 'Numéro d\'inventaire', 'Statut', 'Fabricant', 'Version d\'antivirus', 'Système d\'exploitation']], body: data
+      head: [['#', 'Nom', 'Statut', 'OS', 'Version', 'Arch', 'Version d\'antivirus', 'Antivirus à jour', 'Fabricant', 'Numéro d\'inventaire']], body: computers
     })
   }
 
@@ -64,6 +65,7 @@ export class ExportDialogComponent implements OnInit {
 
 interface DialogData {
   chartUrl: string;
-  tableElement: HTMLElement;
+  chartSize: { width: number, height: number };
+  tableElement: HTMLCanvasElement;
   tableData: Array<{ id: number, name: string, status: string, os: string, version: string, architecture: string, antivirusUptodate: string, antivirusVersion: string, manufacturer: string, serial: string }>;
 }

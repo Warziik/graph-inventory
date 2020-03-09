@@ -19,11 +19,17 @@ export class AppComponent implements OnInit {
 
   constructor(public dialog: MatDialog, private dataService: DataService, private themeService: ThemeService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.dataService.onNativeThemeUpdate().subscribe(
+      (shouldUseDarkColors: boolean) => {
+        this.themeService.setDarkTheme(shouldUseDarkColors);
+      }
+    )
+
     this.dataService.getUserPreferences()
-      .then((userPreferences: any) => {
-        this.themeService.setDarkTheme(userPreferences.useDarkTheme);
-        this.databaseConnected = userPreferences.databaseConnected;
+      .then(({ useDarkTheme, databaseConnected }) => {
+        this.themeService.setDarkTheme(useDarkTheme);
+        this.databaseConnected = databaseConnected;
         if (!this.databaseConnected) {
           this.databaseDialogRef = this.dialog.open(DatabaseDialogComponent);
           this.databaseDialogRef.disableClose = true;

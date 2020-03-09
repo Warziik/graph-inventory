@@ -1,4 +1,4 @@
-<mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="position: absolute; top: 50%; width: 83%;">
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 40vh;">
 </mat-progress-bar>
 
 <form *ngIf="!isLoading" [formGroup]="searchForm" (ngSubmit)="onSubmitForm()">
@@ -60,6 +60,14 @@
       <mat-select formControlName="group">
         <mat-option *ngFor="let group of groups" [value]="group.id">
           {{group.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Fabricant</mat-label>
+      <mat-select formControlName="manufacturer">
+        <mat-option *ngFor="let manufacturer of manufacturers" [value]="manufacturer.id">
+          {{manufacturer.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>

@@ -1,5 +1,5 @@
-<mat-spinner *ngIf="isLoading" style="position: absolute; top: 40%; left: 43%">
-</mat-spinner>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 40vh;">
+</mat-progress-bar>
 
 <div *ngIf="!isLoading">
   <div style="display: grid; grid-template-columns: min-content 1fr 40% 1fr;">
@@ -19,7 +19,7 @@
     </form>
   </div>
   <div style="width: 100%;">
-    <canvas baseChart [colors]="chartColors" [chartType]="chartTypeForm.value['type']" [datasets]="chartData"
+    <canvas baseChart [chartType]="chartTypeForm.value['type']" [colors]="chartColors" [datasets]="chartData"
       [labels]="chartLabels" [options]="chartOptions" [legend]="true">
     </canvas>
   </div>

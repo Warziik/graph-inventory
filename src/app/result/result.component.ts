@@ -1,11 +1,13 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { FormGroup, FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material";
 import { ExportDialogComponent } from "./export-dialog/export-dialog.component";
 import { DataService } from '../services/data.service';
 import { ActivatedRoute } from '@angular/router';
-
+import { ThemeService } from '../services/theme.service';
+import { ThemeService as ChartThemeService } from 'ng2-charts';
+import { ChartOptions } from 'chart.js';
 @Component({
   selector: "app-result",
   templateUrl: "./result.component.html",
@@ -27,9 +29,7 @@ export class ResultComponent implements OnInit {
     { value: "radar", name: "Radar" }
   ];
 
-  chartOptions: Object = {
-    responsive: true
-  };
+  chartOptions: ChartOptions = {};
 
   chartData: Object[];
 
@@ -55,12 +55,22 @@ export class ResultComponent implements OnInit {
     private titleService: Title,
     private dataService: DataService,
     public dialog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private themeService: ThemeService,
+    private chartThemeService: ChartThemeService
   ) {
     this.titleService.setTitle("Résultats");
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.dataService.getUserPreferences()
+      .then(({ useDarkTheme }) => {
+        if (useDarkTheme) {
+          this.loadChartTheme(useDarkTheme);
+        }
+      })
+      .catch(err => console.error);
+
     this.route.queryParams.subscribe(params => {
       this.dataService.getResults(params)
         .then((data: ResultsInterface) => {
@@ -84,18 +94,24 @@ export class ResultComponent implements OnInit {
             type: new FormControl("horizontalBar")
           });
 
+          this.themeService.isDarkTheme.subscribe((status: boolean) => {
+            this.loadChartTheme(status);
+          })
+
           this.isLoading = false;
         })
         .catch(err => console.error);
     })
   }
 
-  openExportDialog() {
+  openExportDialog(): void {
+    const chart: HTMLCanvasElement = document.getElementsByTagName("canvas")[0];
     this.dialog.open(ExportDialogComponent, {
       data: {
-        chartUrl: document.getElementsByTagName("canvas")[0].toDataURL("image/png"),
+        chartUrl: chart.toDataURL("image/png"),
+        chartSize: { width: chart.width / 4, height: chart.height / 4 },
         tableElement: document.getElementById('resultsToConvert'),
-        tableData: this.computers
+        tableData: this.computers.slice()
       }
     });
   }
@@ -121,6 +137,30 @@ export class ResultComponent implements OnInit {
       "#607D8B"
     ];
     return colors[i];
+  }
+
+  private loadChartTheme(value: boolean): void {
+    if (value) {
+      this.chartOptions = {
+        responsive: true,
+        legend: {
+          labels: { fontColor: 'white' }
+        },
+        scales: {
+          xAxes: [{
+            ticks: { fontColor: 'white' },
+            gridLines: { color: 'rgba(255,255,255,0.1)' }
+          }],
+          yAxes: [{
+            ticks: { fontColor: 'white' },
+            gridLines: { color: 'rgba(255,255,255,0.1)' }
+          }]
+        }
+      }
+    } else {
+      this.chartOptions = { responsive: true };
+    }
+    this.chartThemeService.setColorschemesOptions(this.chartOptions);
   }
 }
 

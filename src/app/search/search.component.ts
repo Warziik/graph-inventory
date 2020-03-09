@@ -28,19 +28,22 @@ export class SearchComponent implements OnInit {
 
   groups: Object[];
 
+  manufacturers: Object[];
+
   constructor(private titleService: Title, private router: Router, private dataService: DataService) {
     this.titleService.setTitle("Rechercher");
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.dataService.getDefaultFormValues()
-      .then((data) => {
+      .then((data: DefaultFormValuesInterface) => {
         this.oses = data.oses;
         this.architectures = data.architectures;
         this.versions = data.versions;
         this.statuses = data.statuses;
         this.servicepacks = data.servicepacks;
         this.groups = data.groups;
+        this.manufacturers = data.manufacturers;
 
         this.searchForm = new FormGroup({
           os: new FormControl(1),
@@ -49,14 +52,16 @@ export class SearchComponent implements OnInit {
           servicepack: new FormControl({ value: '', disabled: true }),
           status: new FormControl(''),
           antivirus: new FormControl(''),
-          group: new FormControl('')
+          group: new FormControl(''),
+          manufacturer: new FormControl('')
         })
 
         this.isLoading = false;
 
         this.searchForm.get('version').valueChanges
-          .subscribe(selectedVersion => {
-            if (selectedVersion === 1 || selectedVersion === 5) {
+          .subscribe(selectedVersionId => {
+            const selectedVersion: any = this.versions.filter((v: { id: number, name: string }) => v.id === selectedVersionId)[0];
+            if (selectedVersion.name === '7' || selectedVersion.name === 'XP') {
               this.searchForm.get('servicepack').enable();
             } else {
               this.searchForm.get('servicepack').disable();
@@ -66,7 +71,17 @@ export class SearchComponent implements OnInit {
       .catch(err => console.error);
   }
 
-  onSubmitForm() {
+  onSubmitForm(): void {
     this.router.navigate(['/results'], { queryParams: this.searchForm.value });
   }
+}
+
+interface DefaultFormValuesInterface {
+  oses: Array<Object>;
+  architectures: Array<Object>;
+  versions: Array<Object>;
+  statuses: Array<Object>;
+  servicepacks: Array<Object>;
+  groups: Array<Object>;
+  manufacturers: Array<Object>;
 }

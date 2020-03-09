@@ -1,11 +1,12 @@
 import * as mysql2 from "mysql2";
+import { ValuesInterface, ConfigInterface } from '../utils/interfaces';
 
 export default class Database {
   private connection: mysql2.Connection | undefined;
 
   constructor() { }
 
-  public async init(credentials: ConfigInterface): Promise<any> {
+  async init(credentials: ConfigInterface): Promise<any> {
     this.connection = await mysql2.createConnection({
       host: credentials.host,
       user: credentials.username,
@@ -15,31 +16,29 @@ export default class Database {
     return new Promise((resolve, reject) => {
       this.connection.connect((err: mysql2.QueryError) => {
         if (err) {
-          console.log(`DATABASE ERROR: ${err}`);
-          resolve(false);
+          reject(`DATABASE ERROR: ${err}`)
         } else {
-          console.log("Database connected.");
-          resolve(true);
+          resolve(`Database connected.`);
         }
       })
     })
   }
 
-  public async getResults(args: ValuesInterface): Promise<Object> {
+  async getResults(args: ValuesInterface): Promise<Object> {
     let sqlString: string, chartSqlString: string;
     const params: Array<number> = [];
 
     sqlString = `SELECT 
         c.id id, 
         c.name name, 
-        c.serial serial, 
         s.name status, 
-        m.name manufacturer, 
+        os.name os,  
+        osv.name version, 
+        osa.name architecture, 
         av.antivirus_version antivirusVersion, 
         av.is_uptodate antivirusUptodate, 
-        os.name os, 
-        osv.name version, 
-        osa.name architecture
+        m.name manufacturer, 
+        c.serial serial 
       FROM glpi_computers c
       INNER JOIN glpi_items_operatingsystems ios
           ON c.id = ios.items_id
@@ -91,6 +90,11 @@ export default class Database {
     if (args.group) {
       sqlString += ` AND c.groups_id = ?`;
       params.push(args.group);
+    }
+
+    if (args.manufacturer) {
+      sqlString += ` AND c.manufacturers_id = ?`;
+      params.push(args.manufacturer);
     }
 
     sqlString += ` ORDER BY c.id ASC`;
@@ -161,8 +165,8 @@ export default class Database {
     };
   }
 
-  public async retrieveDefaultFormValues(): Promise<Object> {
-    let oses: Object, architectures: Object, versions: Object, statuses: Object, servicepacks: Object, groups: Object;
+  async retrieveDefaultFormValues(): Promise<Object> {
+    let oses: Object, architectures: Object, versions: Object, statuses: Object, servicepacks: Object, groups: Object, manufacturers: Object;
     await this.query("SELECT id, name FROM glpi_operatingsystems")
       .then(osesResults => {
         oses = osesResults;
@@ -188,6 +192,10 @@ export default class Database {
       })
       .then(groupsResults => {
         groups = groupsResults;
+        return this.query("SELECT id, name FROM glpi_manufacturers");
+      })
+      .then(manufacturersResults => {
+        manufacturers = manufacturersResults;
         //this.clsoe()
       },
         err =>
@@ -196,10 +204,10 @@ export default class Database {
           })
       );
 
-    return { oses, architectures, versions, statuses, servicepacks, groups };
+    return { oses, architectures, versions, statuses, servicepacks, groups, manufacturers };
   }
 
-  private query(sql: string, args?) {
+  private query(sql: string, args?): Promise<any> {
     return new Promise((resolve, reject) => {
       this.connection.query(sql, args, (err: mysql2.QueryError, results) => {
         if (err) return reject(err);
@@ -208,7 +216,7 @@ export default class Database {
     });
   }
 
-  private prepare(sql: string, params: Array<any>) {
+  private prepare(sql: string, params: Array<any>): Promise<any> {
     return new Promise((resolve, reject) => {
       this.connection.execute(sql, params, (err: mysql2.QueryError, results) => {
         if (err) return reject(err);
@@ -217,7 +225,7 @@ export default class Database {
     });
   }
 
-  private close() {
+  private close(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.connection.end((err: mysql2.QueryError) => {
         if (err) return reject(err);
@@ -225,21 +233,4 @@ export default class Database {
       });
     });
   }
-}
-
-interface ValuesInterface {
-  os: number | null;
-  architecture: number | null;
-  version: number | null;
-  servicepack: number | null;
-  antivirus: number | null;
-  status: number | null;
-  group: number | null;
-}
-
-interface ConfigInterface {
-  host: string;
-  username: string;
-  password: string | null;
-  dbname: string;
 }

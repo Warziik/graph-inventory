@@ -14,11 +14,11 @@ export class ToolbarComponent implements OnInit {
 
   constructor(private themeService: ThemeService, private dataService: DataService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.isDarkTheme = this.themeService.isDarkTheme;
   }
 
-  toggleDarkTheme(checked: boolean) {
+  toggleDarkTheme(checked: boolean): void {
     this.themeService.setDarkTheme(checked);
     this.dataService.updateTheme(checked);
   }

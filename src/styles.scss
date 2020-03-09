@@ -36,6 +36,19 @@
 body {
   margin: 0;
   padding: 0;
+
+  &::-webkit-scrollbar {
+    //display: none;
+    width: 7px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #7a7a7a;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgb(70, 69, 69);
+  }
 }
 
 .mat-app-background {
@@ -48,6 +61,6 @@ body {
 
 .box {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   grid-gap: 20px;
 }

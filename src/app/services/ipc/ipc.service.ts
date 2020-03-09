@@ -25,7 +25,7 @@ export class IpcService {
    * @param channel 
    * @param listener 
    */
-  public on(channel: string, listener: any): Promise<any> {
+  on(channel: string, listener: any): Promise<any> {
     if (!this._ipc) {
       return;
     }
@@ -36,7 +36,7 @@ export class IpcService {
   * @param channel
   * @param args
   */
-  public invoke(channel: string, ...args: any[]): Promise<any> {
+  invoke(channel: string, ...args: any[]): Promise<any> {
     if (!this._ipc) {
       return;
     }
@@ -48,7 +48,7 @@ export class IpcService {
    * @param channel 
    * @param args 
    */
-  public send(channel: string, ...args: any[]): void {
+  send(channel: string, ...args: any[]): void {
     if (!this._ipc) {
       return;
     }

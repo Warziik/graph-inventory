@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
-  private _darkTheme = new Subject<boolean>();
-  isDarkTheme = this._darkTheme.asObservable();
+  private _darkTheme: Subject<boolean> = new Subject<boolean>();
+  isDarkTheme: Observable<boolean> = this._darkTheme.asObservable();
 
   constructor(private overlayContainer: OverlayContainer) { }
 
