@@ -1,5 +1,5 @@
 // Database
-export interface ValuesInterface {
+export interface DefaultFormValuesInterface {
     os: number | null;
     architecture: number | null;
     version: number | null;

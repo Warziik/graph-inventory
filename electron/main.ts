@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Menu, ipcMain, nativeTheme, IpcMainEvent } from "electron";
-import { ValuesInterface } from './utils/interfaces';
+import { DefaultFormValuesInterface } from './utils/interfaces';
 
 import * as url from "url";
 import * as path from "path";
@@ -12,7 +12,7 @@ const store: Store = new Store({
   defaults: {}
 });
 
-process.env.NODE_ENV = 'devlopment';
+process.env.NODE_ENV = 'production';
 
 // Vérifie si les informations de connexion à la base de données ont déjà été assignées
 if (store.has('databaseCredentials')) {
@@ -30,6 +30,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1180,
     height: 720,
+    resizable: false,
     webPreferences: {
       nodeIntegration: true
     }
@@ -37,7 +38,7 @@ function createWindow() {
 
   win.loadURL(
     url.format({
-      pathname: path.join(__dirname, "/../../dist/index.html"),
+      pathname: path.join(__dirname, "/../index.html"),
       protocol: "file:",
       slashes: true
     })
@@ -92,7 +93,7 @@ ipcMain.handle('client:requestFormValues', async () => {
     .catch(console.error)
 })
 
-ipcMain.handle('client:requestResults', async (event: IpcMainEvent, ...args: ValuesInterface[]) => {
+ipcMain.handle('client:requestResults', async (event: IpcMainEvent, ...args: DefaultFormValuesInterface[]) => {
   return await db
     .getResults(args[0])
     .then(results => results)

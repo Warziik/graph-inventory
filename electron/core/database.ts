@@ -1,5 +1,5 @@
 import * as mysql2 from "mysql2";
-import { ValuesInterface, ConfigInterface } from '../utils/interfaces';
+import { DefaultFormValuesInterface, ConfigInterface } from '../utils/interfaces';
 
 export default class Database {
   private connection: mysql2.Connection | undefined;
@@ -24,7 +24,7 @@ export default class Database {
     })
   }
 
-  async getResults(args: ValuesInterface): Promise<Object> {
+  async getResults(args: DefaultFormValuesInterface): Promise<Object> {
     let sqlString: string, chartSqlString: string;
     const params: Array<number> = [];
 
@@ -207,7 +207,7 @@ export default class Database {
     return { oses, architectures, versions, statuses, servicepacks, groups, manufacturers };
   }
 
-  private query(sql: string, args?): Promise<any> {
+  private query(sql: string, args?): Promise<Array<mysql2.BinaryRow>> {
     return new Promise((resolve, reject) => {
       this.connection.query(sql, args, (err: mysql2.QueryError, results) => {
         if (err) return reject(err);
@@ -216,7 +216,7 @@ export default class Database {
     });
   }
 
-  private prepare(sql: string, params: Array<any>): Promise<any> {
+  private prepare(sql: string, params: Array<any>): Promise<Array<mysql2.BinaryRow>> {
     return new Promise((resolve, reject) => {
       this.connection.execute(sql, params, (err: mysql2.QueryError, results) => {
         if (err) return reject(err);
@@ -225,7 +225,7 @@ export default class Database {
     });
   }
 
-  private close(): Promise<any> {
+  private close(): Promise<null> {
     return new Promise((resolve, reject) => {
       this.connection.end((err: mysql2.QueryError) => {
         if (err) return reject(err);

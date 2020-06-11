@@ -3,7 +3,7 @@
   "productName": "GraphInventory",
   "version": "1.0.0",
   "author": "Alex Chesnay <contact@alex-chesnay.fr> (https://alex-chesnay.fr)",
-  "main": "electron/dist/main.js",
+  "main": "dist/electron/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
