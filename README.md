@@ -1,7 +1,10 @@
 # Graph Inventory
-
 Application bureau permettant la génération et l'export de graphique à partir de données issues de [GLPI](https://glpi-project.org/fr/).
 
-## Licence
+## Captures d'écran
+![Vue Connexion](docs/screenshot_login.png)
+![Vue Recherche](docs/screenshot_search.png)
+![Vue Export](docs/screenshot_export.png)
 
+## Licence
 Dépôt sous licence [MIT](https://choosealicense.com/licenses/mit/).
